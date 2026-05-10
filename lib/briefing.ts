@@ -212,7 +212,7 @@ function dedupeEntries(entries: RankedEntry[]) {
   const seen = new Set<string>();
 
   return entries.filter((entry) => {
-    const key = entry.title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "").slice(0, 80);
+    const key = normalizeKey(entry.title).slice(0, 80);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -297,7 +297,11 @@ function cutText(value: string, maxLength: number) {
 }
 
 function slugify(value: string) {
-  return value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "").slice(0, 48);
+  return normalizeKey(value).replace(/\s+/g, "-").replace(/^-|-$/g, "").slice(0, 48);
+}
+
+function normalizeKey(value: string) {
+  return value.toLowerCase().replace(/[^\w\u4e00-\u9fff]+/g, " ").trim();
 }
 
 function formatToday() {
