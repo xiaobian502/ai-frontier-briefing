@@ -180,7 +180,7 @@ function getRecencyScore(dateText: string) {
 
 function inferAudience(text: string): Audience[] {
   const matched = audienceRules.filter((rule) => rule.terms.some((term) => text.includes(term))).map((rule) => rule.audience);
-  const unique = [...new Set(matched)].slice(0, 3);
+  const unique = Array.from(new Set(matched)).slice(0, 3);
   return unique.length ? unique : ["打工人"];
 }
 
